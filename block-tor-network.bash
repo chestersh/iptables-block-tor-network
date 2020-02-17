@@ -10,11 +10,17 @@ if ! which ipset >/dev/null;then
 	exit;
 fi;
 #exit;
+INTERFACE="em1"; #change with your interface
 CHAIN_NAME="TOR_BLOCK"
 CHAIN_LOG=${CHAIN_NAME}_LOG;
 TMP_TOR_LIST="/tmp/temp_tor_list"
-IP_ADDRESS=$(ifconfig em1 | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
+IP_ADDRESS=$(ifconfig $INTERFACE | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
 PORT="80 22 443 21"
+
+if [ -z "$IP_ADDRESS" ];then
+    echo "[!] Impossible to get your IP from interface $INTERFACE . Change your interface?";
+    exit 1;
+fi;
 
 /sbin/iptables -n -v -L INPUT --line-number|grep $CHAIN_NAME|while read line;do
 	num_rule=$(echo $line|cut -d ' ' -f1);
