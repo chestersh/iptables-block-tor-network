@@ -1,4 +1,6 @@
 #!/bin/bash
+#author Kevin MULLER https://github.com/kiki67100/iptables-block-tor-network
+
 
 if [ "$USER" != "root" ]; then
     echo "[!] Must be run as root (you are $USER)."
